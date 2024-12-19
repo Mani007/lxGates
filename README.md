@@ -68,3 +68,20 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Create backend virtual environment for python flask
+First run the following command to create virtual environment in the terminal at your base folder. 
+```
+python3 -m venv .env
+```
+Now run the following command to run virtual environment in the terminal at your base folder.
+```
+source ./venv/bin/activate
+```
+Now install all the dependency with thw following command inside your **backend** folder. 
+```
+pip3 install -r requirements.txt
+```
+Now run the flask backend app using the following command inside the backend folder. 
+```
+python app.py
+```
