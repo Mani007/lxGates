@@ -7,7 +7,9 @@
 /dataset
 dataset
 
-
+.env
+.env/
+/.env 
 # testing
 /coverage
 
