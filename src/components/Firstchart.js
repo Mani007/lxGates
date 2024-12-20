@@ -34,7 +34,9 @@ const Firstchart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/vasco100');
+        const response1 = await axios.get('http://localhost:5000/ic2db100');
         const fetchedData = response.data;
+        const fetchedData1 = response1.data;
 
         // Assuming the fetched data structure is something like this:
         // {
@@ -48,7 +50,7 @@ const Firstchart = () => {
           datasets: [
             {
               label: 'Vehicle Entering at a point', // Dataset label
-              data: fetchedData.map((rows)=> rows[0]), // Data for the Y axis
+              data: [fetchedData.map((rows)=> rows[0]),fetchedData1.map((rows)=> rows[0])], // Data for the Y axis
               borderColor: 'rgb(75, 192, 192)',
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               fill: true, // Fill the area under the line
