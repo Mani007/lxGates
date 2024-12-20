@@ -64,6 +64,34 @@ def n117db100():
             
         })
     return jsonify(rows)
+@app.route("/ic2db100")
+def ic2db100():
+    conn = sqlite3.connect('../datasets/ic2db.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT C12,time from ic2db LIMIT 100;") # 100 for 1-2 days data and 1000 for 3-4 weeks data
+    rows = cursor.fetchall()
+    row_list = []
+    for row in rows:
+        row_list.append({
+            "values": row[0],
+            "timestamp": row[1],
+            
+        })
+    return jsonify(rows)
+@app.route("/ic16db100")
+def ic16db100():
+    conn = sqlite3.connect('../datasets/ic16db.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT C12,time from ic16db LIMIT 100;") # 100 for 1-2 days data and 1000 for 3-4 weeks data
+    rows = cursor.fetchall()
+    row_list = []
+    for row in rows:
+        row_list.append({
+            "values": row[0],
+            "timestamp": row[1],
+            
+        })
+    return jsonify(rows)
 @app.route("/vasco200")
 def vasco200():
     conn = sqlite3.connect('../datasets/vascodb.db')
