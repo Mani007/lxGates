@@ -109,7 +109,7 @@ const Firstchart = () => {
 
   return (
     <div>
-      <h2>Vehicles entering at Ponte Vasco da Gama</h2>
+      {/* <h2>Vehicles entering at Ponte Vasco da Gama</h2> */}
       <Line data={chartData} options={options} />
     </div>
   );
