@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify
 from flask_cors import CORS
 import sqlite3
 
@@ -7,6 +7,14 @@ CORS(app)
 @app.route("/")
 def hello_world():
     return "<h1>Hello, World!!!</h1>"
+
+@app.route("/vasco")
+def vasco():
+    conn = sqlite3.connect('../datasets/vascodb.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT C12,time from vascodb LIMIT 100;")
+    rows = cursor.fetchall()
+    return jsonify(rows)
 
 if __name__ == '__main__':
 
