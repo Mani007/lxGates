@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import moment from 'moment';
 
 // Registering Chart.js components
 ChartJS.register(
@@ -32,7 +33,7 @@ const Firstchart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/vasco');
+        const response = await axios.get('http://localhost:5000/vasco100');
         const fetchedData = response.data;
 
         // Assuming the fetched data structure is something like this:
@@ -43,10 +44,10 @@ const Firstchart = () => {
 
         // Mapping over the data to prepare the chart format
         setChartData({
-          labels: fetchedData.map((rows)=> rows[1]), // Timestamps (X axis)
+          labels: fetchedData.map((rows)=> moment(rows[1]).format('MMMM Do YYYY, h:mm:ss a')), // Timestamps (X axis)
           datasets: [
             {
-              label: 'Temperature', // Dataset label
+              label: 'Vehicle Entering at a point', // Dataset label
               data: fetchedData.map((rows)=> rows[0]), // Data for the Y axis
               borderColor: 'rgb(75, 192, 192)',
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -79,7 +80,7 @@ const Firstchart = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Time Series Line Chart',
+        text: 'Vehicles entering at Ponte Vasco da Gama',
       },
       tooltip: {
         mode: 'index',
@@ -98,17 +99,17 @@ const Firstchart = () => {
         type: 'linear', // Y-axis should be linear for numerical data
         title: {
           display: true,
-          text: 'Temperature (°C)',
+          text: 'Number of vehicle entering at a point',
         },
-        min: 0, // Optional: set minimum Y-axis value
-        max: 30, // Optional: set maximum Y-axis value
+        // min: 0, // Optional: set minimum Y-axis value
+        // max: 30, // Optional: set maximum Y-axis value
       },
     },
   };
 
   return (
     <div>
-      <h2>Time Series Line Chart</h2>
+      <h2>Vehicles entering at Ponte Vasco da Gama</h2>
       <Line data={chartData} options={options} />
     </div>
   );
