@@ -1,53 +1,117 @@
-import React,  { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-function Firstchart() {
-    // State to store fetched data and loading/error state
-  const [data, setData] = useState([]);
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Registering Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const Firstchart = () => {
+  // State to store chart data and loading/error states
+  const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Replace with your API endpoint
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/vasco');  // API endpoint
-        setData(response.data); // Assuming the API returns the data directly in response.data
-        setLoading(false); // Stop loading when data is fetched
+        const response = await axios.get('http://localhost:5000/vasco');
+        const fetchedData = response.data;
+
+        // Assuming the fetched data structure is something like this:
+        // {
+        //   timestamps: ['2024-12-01', '2024-12-02', ...],
+        //   values: [20, 22, 19, 24, 23, ...]
+        // }
+
+        // Mapping over the data to prepare the chart format
+        setChartData({
+          labels: fetchedData.map((rows)=> rows[1]), // Timestamps (X axis)
+          datasets: [
+            {
+              label: 'Temperature', // Dataset label
+              data: fetchedData.map((rows)=> rows[0]), // Data for the Y axis
+              borderColor: 'rgb(75, 192, 192)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              fill: true, // Fill the area under the line
+              tension: 0.1, // Line smoothness
+              pointRadius: 5, // Radius of the data points
+            },
+          ],
+        });
+
+        setLoading(false);
       } catch (err) {
-        setError(err.message); // Handle errors
+        setError('Failed to fetch data');
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array to run the effect only once
+  }, []);
 
-  // Display loading state, error state, or fetched data
+  // Handle loading state
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  return (
-    <>
-     <div>
-      <h1>Fetched Data</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>{row[0]}</td>
-              <td>{row[1]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    </>
-  )
-}
 
-export default Firstchart
+  // Handle error state
+  if (error) return <div>{error}</div>;
+
+  // Chart.js options
+  const options = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Time Series Line Chart',
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      },
+    },
+    scales: {
+      x: {
+        type: 'category', // For categorical (e.g., date) values
+        title: {
+          display: true,
+          text: 'Date',
+        },
+      },
+      y: {
+        type: 'linear', // Y-axis should be linear for numerical data
+        title: {
+          display: true,
+          text: 'Temperature (°C)',
+        },
+        min: 0, // Optional: set minimum Y-axis value
+        max: 30, // Optional: set maximum Y-axis value
+      },
+    },
+  };
+
+  return (
+    <div>
+      <h2>Time Series Line Chart</h2>
+      <Line data={chartData} options={options} />
+    </div>
+  );
+};
+
+export default Firstchart;

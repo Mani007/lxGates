@@ -14,6 +14,13 @@ def vasco():
     cursor = conn.cursor()
     cursor.execute("SELECT C12,time from vascodb LIMIT 100;")
     rows = cursor.fetchall()
+    row_list = []
+    for row in rows:
+        row_list.append({
+            "values": row[0],
+            "timestamp": row[1],
+            
+        })
     return jsonify(rows)
 
 if __name__ == '__main__':
